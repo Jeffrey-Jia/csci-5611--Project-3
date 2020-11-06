@@ -23,12 +23,12 @@ Mouse:
 **NOTE: The camera's cframe is independent of the Asteroid's cframe, vice versa. What this means is that if the camera is moved in some arbitrary fashion and you start to move the Asteroid, the Asteroid would move in respect to the world and not the camera (e.g. left arrow key to move left means the Asteroid will move left in respect to the world, but would probably move "right" in camera view)**
 
 Simulation:
-    - G - Pause/Unpause simulation
+    - R - Rerun simulation
 
 
   ## Implementation features
 
-  **A quick note: Our cloth is based on a mixture of polyester-like and feathersilk-like materials, which results in a cloth that is somewhat airy**
+  **A quick note: **
 
 
   - Single Agent Navigation* (50)
@@ -75,9 +75,10 @@ Simulation:
 
   ## Difficulties encountered
 
-  I could not get the Crowd simulation element working. I think this is likely due to the way my code was laid out prior to attempting to account for crowd simulation.
+  I could not quite get the Orientation Smoothing part working perfectly. When the agents rotate they definatly do not snap into pace and it is clear they gradually turn. However, it is sometimes the case where some of the agent over rotate.  
 
-  The Orientation Smoothing took a long time to get to work, it was very difficult for me to make the agent not simply snap in place.
+  I could not get the Crowd simulation element working as well as I would have liked, but I was still able to get interaction among the agents. I think this is likely due to the way my code was laid out prior to attempting to account for crowd simulation.
+
 
   ## Video
 
