@@ -113,7 +113,7 @@ ArrayList<Integer> runAStar(Vec3[] nodePos, int numNodes, int startID, int goalI
     pQueue p_top = priorityQueue.poll();
     int currentNode = p_top.index;
     if (currentNode == goalID){
-      println("Goal found!");
+      //println("Goal found!");
       break;
     }
     for (int i = 0; i < neighbors[currentNode].size(); i++){

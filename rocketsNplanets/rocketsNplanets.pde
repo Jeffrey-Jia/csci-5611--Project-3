@@ -1,5 +1,5 @@
 //CSCI 5611 - Project 3
-//Jeffrey Jjia <jiaxx215>
+//Jeffrey Jia <jiaxx215>
 //Instructor: Stephen J. Guy <sjguy@umn.edu>
 
 //USAGE:
@@ -14,7 +14,7 @@ Camera camera;
 //Change the below parameters to change the scenario/roadmap size
 int numObstacles = 10;
 int numNodes = 999;
-int numAgents = 2;
+int numAgents = 10;
   
 //A list of circle obstacles
 static int maxNumObstacles = 15;
@@ -60,8 +60,9 @@ void placeRandomObstacles(int numObstacles){
 }
 
 //The agent we are controlling
-float old_rotate = 0.0;
-float rotate = 0.0;
+float old_rotate[] = new float[maxNumAgents];
+float rotate[] = new float[maxNumAgents];
+int rot_counter[] = new int[maxNumAgents];
 float agentRad = 10;
 Vec3 agentPos[] = new Vec3[maxNumAgents];
 Vec3 agentVel[] = new Vec3[maxNumAgents];
@@ -95,6 +96,11 @@ void setup(){
   rocketship = loadImage("rocket.png");
   earth = loadImage("earth.jpg");
   satellite = loadImage("satellite.png");
+  for (int i = 0; i < numAgents; i++){
+    old_rotate[i] = 0.0;
+    rotate[i] = 0.0;
+    rot_counter[i] = 1;
+  }
   testPRM();
 }
 
@@ -122,10 +128,6 @@ void testPRM(){
     startPos[i] = sampleFreePos();
   }
   goalPos = sampleFreePos();
-  //int start_index = (int)random(0, numNodes-2);
-  //int goal_index = (int)random(0, numNodes-2);
-  //startPos = nodePos[start_index];
-  //goalPos = nodePos[goal_index];
   agentPos = startPos;
   for (int i = 0; i < numAgents; i++){
     curPathIdx[i] = 0;
@@ -134,16 +136,10 @@ void testPRM(){
   generateRandomNodes(numNodes, circlePos, circleRad);
   connectNeighbors(circlePos, circleRad, numObstacles, nodePos, numNodes);
   
-  //startTime = System.nanoTime();
   for (int i = 0; i < numAgents; i++){
     tempPath = planPath(startPos[i], goalPos, circlePos, circleRad, numObstacles, nodePos, numNodes);
     curPath.add(tempPath);
   }
-  //endTime = System.nanoTime();
-  //pathQuality();
-  
-  //println("Nodes:", numNodes," Obstacles:", numObstacles," Time (us):", int((endTime-startTime)/1000),
-  //        " Path Len:", pathLength, " Path Segment:", curPath.size()+1,  " Num Collisions:", numCollisions);
 }
 
 hitInfo hit[] = new hitInfo[maxNumAgents];
@@ -187,35 +183,23 @@ Vec3[] computeAgentVel(){
       if (target[i] != goalPos) curPathIdx[i]++;
     }
   }
-  ////Avoidance Force
-  //for (int i = 0; i < numAgents; i++){
-  //  for (int j1 = i; i > 0; i--){
-  //    if (j1 == i){
-  //      agentVel[i] = agentVel[i];
-  //    } else {
-  //      if(agentPos[i].distanceTo(agentPos[j1]) < 40){
-  //        if(agentPos[i].distanceTo(goalPos) < agentPos[j1].distanceTo(goalPos)){
-  //          agentVel[i] = new Vec3(agentVel[i].x*2,agentVel[i].y*2,0);
-  //          agentVel[j1] = new Vec3(0,0,0);
-  //        } else {
-  //          agentVel[j1] = new Vec3(agentVel[j1].x*2,agentVel[j1].y*2,0);
-  //          agentVel[i] = new Vec3(0,0,0);
-  //        }
-  //      }
-  //    }
-  //  }
-  //  for (int j2 = i + 1; i < numAgents; i++){
-  //    if(agentPos[i].distanceTo(agentPos[j2]) < 40){
-  //      if(agentPos[i].distanceTo(goalPos) < agentPos[j2].distanceTo(goalPos)){
-  //          agentVel[i] = new Vec3(agentVel[i].x*2,agentVel[i].y*2,0);
-  //          agentVel[j2] = new Vec3(0,0,0);
-  //        } else {
-  //          agentVel[j2] = new Vec3(agentVel[j2].x*2,agentVel[j2].y*2,0);
-  //          agentVel[i] = new Vec3(0,0,0);
-  //        }
-  //    }
-  //  }
-  //}
+  //Avoidance Force
+  //int agentID = 0;
+  for (int i = 0; i < numAgents; i++){
+    int agentID = 0;
+    while(agentID < numAgents){
+      if(i == agentID){
+        agentVel[i] = target[i].minus(agentPos[i]).normalized().times(goalSpeed);
+      } else {
+        if(agentPos[i].distanceTo(goalPos) > 50){
+          if(agentPos[i].distanceTo(agentPos[agentID]) < 50){
+            agentVel[i] = new Vec3(0,0,0);
+          }
+        }
+      }
+      agentID +=  1;
+    }
+  }
   return agentVel;
 }
 
@@ -225,7 +209,6 @@ void moveAgent(float dt){
     agentPos[i].add(agentVel[i].times(dt));
   }
 }
-int rot_counter = 1;
 
 void draw(){
   //println("FrameRate:",frameRate);
@@ -292,54 +275,29 @@ void draw(){
     pushMatrix();
     translate(agentPos[i].x, agentPos[i].y, agentPos[i].z);
     fill(255,20,20);
-    old_rotate = rotate;
-    rotate = (float)Math.atan2(nodePos[curPath.get(i).get(curPathIdx[i])].y-agentPos[i].y, nodePos[curPath.get(i).get(curPathIdx[i])].x-agentPos[i].x);
+    old_rotate[i] = rotate[i];
+    rotate[i] = (float)Math.atan2(nodePos[curPath.get(i).get(curPathIdx[i])].y-agentPos[i].y, nodePos[curPath.get(i).get(curPathIdx[i])].x-agentPos[i].x);
     if(target[i] == goalPos){
-      rotate = (float)Math.atan2(goalPos.y-agentPos[i].y, goalPos.x-agentPos[i].x);
+      rotate[i] = (float)Math.atan2(goalPos.y-agentPos[i].y, goalPos.x-agentPos[i].x);
     }
-    //float rotate = (float)Math.atan2(agentPos.x-nodePos[curPath.get(curPathIdx)].x, agentPos.y-nodePos[curPath.get(curPathIdx)].y);
-    //println(abs(old_rotate-rotate));
-    //println(frameRate);
-    //if(abs(old_rotate-rotate) > 0.5){
-    //  for(int inc = 0; inc < 4; inc++){
-    //      rotateZ((radians(90)+rotate)/4);
-    //      pushMatrix();
-    //      drawCylinder(20, 5, 1, 50);
-    //      popMatrix();
-    //      delay(50);
-    //  }
-    //}
-    //else{
-    //  rotateZ((radians(90)+rotate));
-    //  drawCylinder(20, 5, 1, 50);
-    //}
-    //if(abs(old_rotate-rotate) > 0.2){
-    //  //int rot_counter = 1;
-    //  //rotateZ(radians(90) + rot_counter*0.1);
-    //  //rotate = rot_counter*0.1;
-    //  //rot_counter += 1;
-    //  if(rotate < 0){
-    //    rotateZ(radians(-90) - rot_counter*0.1);
-    //    rotate = -rot_counter*0.1;
-    //    rot_counter += 1;
-    //  }
-    //  else{
-    //    rotateZ(radians(90) + rot_counter*0.1);
-    //    rotate = rot_counter*0.1;
-    //    rot_counter += 1;
-    //  }
-    //  print("inc");
-    //}
-    //else{
-    //  rotateZ(radians(90)+rotate);
-    //  rot_counter = 1;
-    //  //old_rotate = rotate;
-    //}
-    rotateZ(radians(90)+rotate);
+    float rot_change = abs(old_rotate[i] - rotate[i]);
+    if(rot_change > 0.2 && rot_counter[i] < 30){
+      //agentVel[i] = new Vec3(0,0,0);
+      if (rotate[i] < 0){
+        rotateZ(-0.1*rot_counter[i]);
+        rotate[0] = -0.1*rot_counter[i];
+        rot_counter[i] += 1;
+      } else {
+        rotateZ(0.1*rot_counter[i]);
+        rotate[i] = 0.1*rot_counter[i];
+        rot_counter[i] += 1;
+      }
+    } else {
+      rotateZ(rotate[i]);
+      rot_counter[i] = 1;
+    }
     drawRocket(20, 5, 1, 50);
     popMatrix();
-    //curPath = planPath(agentPos, goalPos, circlePos, circleRad, numObstacles, nodePos, numNodes);
-    //curPathIdx = 0;
   }
 }
 
@@ -354,8 +312,8 @@ void drawRocket( int sides, float r1, float r2, float h)
     for (int i = 0; i < sides; i++) {
         float x = cos( radians( i * angle ) ) * r2;
         float y = sin( radians( i * angle ) ) * r2;
-        //vertex( x, y, -halfHeight);
-        vertex( x, -halfHeight,y);
+        vertex(halfHeight, y, x);
+        //vertex(x, -halfHeight,y);
     }
     endShape(CLOSE);
 
@@ -364,8 +322,8 @@ void drawRocket( int sides, float r1, float r2, float h)
     for (int i = 0; i < sides; i++) {
         float x = cos( radians( i * angle ) ) * r1;
         float y = sin( radians( i * angle ) ) * r1;
-        //vertex( x, y, 0);
-        vertex( x, 0, y);
+        vertex( 0, y, x);
+        //vertex( x, 0, y);
     }
     endShape(CLOSE);
     
@@ -376,18 +334,18 @@ void drawRocket( int sides, float r1, float r2, float h)
         float y1 = sin( radians( i * angle ) ) * r2;
         float x2 = cos( radians( i * angle ) ) * r1;
         float y2 = sin( radians( i * angle ) ) * r1;
-        //vertex( x1, y1, -halfHeight);
-        //vertex( x2, y2, 0);
-        vertex( x1, -halfHeight, y1);
-        vertex( x2, 0, y2);    
+        vertex(halfHeight, y1, x1);
+        vertex(0, y2, x2);
+        //vertex( x1, -halfHeight, y1);
+        //vertex( x2, 0, y2);    
     }
     endShape(CLOSE);
     beginShape();
     for (int i = 0; i < sides; i++) {
         float x = cos( radians( i * angle ) ) * r1;
         float y = sin( radians( i * angle ) ) * r1;
-        //vertex( x, y, 0);
-        vertex( x, 0, y);
+        vertex( 0, y, x);
+        //vertex( x, 0, y);
     }
     endShape(CLOSE);
 
@@ -396,8 +354,8 @@ void drawRocket( int sides, float r1, float r2, float h)
     for (int i = 0; i < sides; i++) {
         float x = cos( radians( i * angle ) ) * r1;
         float y = sin( radians( i * angle ) ) * r1;
-        //vertex( x, y, halfHeight);
-        vertex( x, halfHeight,y);
+        vertex(-halfHeight, y, x);
+        //vertex( x, halfHeight,y);
     }
     endShape(CLOSE);
     
@@ -406,10 +364,10 @@ void drawRocket( int sides, float r1, float r2, float h)
     for (int i = 0; i < sides + 1; i++) {
         float x = cos( radians( i * angle ) ) * r1;
         float y = sin( radians( i * angle ) ) * r1;
-        //vertex( x, y, halfHeight);
-        //vertex( x, y, 0);    
-        vertex( x, halfHeight,y);
-        vertex( x, 0, y);    
+        vertex(-halfHeight, y, x);
+        vertex(0, y, x);    
+        //vertex( x, halfHeight,y);
+        //vertex( x, 0, y);    
     }
     endShape(CLOSE);
 
@@ -466,11 +424,11 @@ void keyReleased(){
 }
 
 void mousePressed(){
-  //if (mouseButton == RIGHT){
-  //  //startPos = new Vec3(mouseX, mouseY,0);
-  //  agentPos = startPos;
-  //  //println("New Start is",startPos.x, startPos.y);
-  //}
+  if (mouseButton == RIGHT && numAgents == 1){
+    //startPos = new Vec3(mouseX, mouseY,0);
+    agentPos = startPos;
+    //println("New Start is",startPos.x, startPos.y);
+  }
   if (mouseButton == LEFT && generate_obstacle && numObstacles < maxNumObstacles){
     numObstacles += 1;
     circlePos[numObstacles-1] = new Vec3(mouseX, mouseY,0);
@@ -479,11 +437,8 @@ void mousePressed(){
   }
   if (mouseButton == LEFT && !generate_obstacle){
     goalPos = new Vec3(mouseX, mouseY,0);
-    //println("New Goal is",goalPos.x, goalPos.y);
   }
   connectNeighbors(circlePos, circleRad, numObstacles, nodePos, numNodes);
-  //curPath = planPath(startPos, goalPos, circlePos, circleRad, numObstacles, nodePos, numNodes);
-   //curPath.clear();
   for (int i = 0; i < numAgents; i++){
     tempPath = planPath(agentPos[i], goalPos, circlePos, circleRad, numObstacles, nodePos, numNodes);
     curPath.set(i,tempPath);

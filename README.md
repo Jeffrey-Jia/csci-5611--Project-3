@@ -32,11 +32,11 @@ Simulation:
 
 
   - Single Agent Navigation* (50)
-      - I used my hw3 implementation of an A* PRM that allows a single agent, in this case a rocket, navigate through space
+      - I used my hw3 implementation of an A* PRM that allows a single agent, in this case a rocket ship, navigate through space
       whilst avoiding obstacles, in this case planets and an user controlled asteroid.
 
   - 3D Rendering & Camera (10)
-      - The planets, asteroid, rocket, and camera exist in 3D space, and is able to render at ~45 FPS. There are also directional and point lights shot onto the scene to provide the planets with a more 3D look. For asteroid and camera controls, see above.
+      - The planets, asteroid, rocket ship, and camera exist in 3D space, and is able to render at ~45 FPS. There are also directional and point lights shot onto the scene to provide the planets with a more 3D look. For asteroid and camera controls, see above.
 
   - Improved Agent & Scene Rendering (10)
       - The agent is a cone shape stacked on top of a cylinder that I rendered using custom vertices. This shape is not a basic shape
@@ -44,10 +44,10 @@ Simulation:
       - The obstacles are also draw in 3d and textured (both the planets and the asteroid).
 
   - Orientation Smoothing (10)
-      - As the rocket changes direction, the direction the tip of the rocket faces is the same as the direction the rocket is traveling. This change occurs gradually.
+      - As the rocket ship changes direction, the direction the tip of the rocket ship faces is the same as the direction the rocket ship is traveling. This change occurs gradually.
 
   - Planning Rotation (10)
-      - There are times when my agent, the rocket, can only fit through a passage if it is oriented in the correct fashion.
+      - There are times when my agent, the rocket ship, can only fit through a passage if it is oriented in the correct fashion.
           - Since I can decide the locations of my obstacles, I put two near each other with a small gap where the longest dimension
           would not fit to see if my agent(s) would pass through it properly, which it did.
 
@@ -60,11 +60,12 @@ Simulation:
       -  The real time spawning of new Planets changes the path of the agent(s).
 
   - Multiple Agents Planning+ (10)
-      - My implementation allows for the creation of multiple agents, in my case rockets.
-          - Each of these rockets spawn in a random location and have their own best path to the goal (Earth).
+      - My implementation allows for the creation of multiple agents, in my case rocket ships.
+          - Each of these rocket ships spawn in a random location and have their own best path to the goal (Earth).
 
   - Crowd Simulation+ (20)
-     - Not Implemented
+     - The rocket ships are able to detect when other rocket ships are nearby and if it detects any other rocket ship are nearby it will stop its motion temporary until the other rocket ships pass.
+          - When all the rocket ships start at the same location and need to move to the new goal location, they will line up and travel there in a single file line.
 
   ## Tools Used
 
