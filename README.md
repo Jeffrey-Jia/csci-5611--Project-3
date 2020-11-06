@@ -1,54 +1,70 @@
-# CSCI 5611 - Project 3: Physically-Based Animation with PDEs
+# CSCI 5611 - Project 3: AI Planning
 ### Jeffrey Jia | jiaxx215
 
 ## Controls
 
 Camera:<br>
-    - WASD - Move the camera up, down, left, right on the xz-plane<br>
-    - Q/E - Rotate the camera counterclockwise/clockwise about the y-axis<br>
-    - C - Move the camera down along the y-axis<br>
-    - SPACEBAR - Move the camera up along the y-axis<br>
-    - R - Reset camera position
+    - TFGH - Move the camera up, down, left, right on the xy-plane<br>
+    - A/D - Rotate the camera counterclockwise/clockwise about the y-axis<br>
+    - W/S - Rotate the camera up/down about the x-axis<br>
+    - Q/E - Move camera in/out of the xy plane <br>
+    - Z - Reset camera position
 
-Ball:
-    - Arrow Keys - Move the ball up, down, left, right on the xz-plane<br>
-    - Y + Up Arrow - Move the ball up along y axis<br>
-    - Y + Down Arrow - Move the ball down along y axis
+User Controlled Obstacle (Asteroid):
+    - Arrow Keys - Move the Asteroid up, down, left, right on the xy-plane<br>
 
-**NOTE: The camera's cframe is independent of the ball's cframe, vice versa. What this means is that if the camera is moved in some arbitrary fashion and you start to move the ball, the ball would move in respect to the world and not the camera (e.g. left arrow key to move left means the ball will move left in respect to the world, but would probably move "right" in camera view)**
+Obstacle Generation (Planets):
+    - O - Toggle obstacle generation on/off<br>
+
+Mouse:
+    - Left Click (while obstacle generation toggled off) - Move goal to click location (earth)
+    - Left Click (while obstacle generation toggled on) - Generate planet obstacle at click location  
+
+**NOTE: The camera's cframe is independent of the Asteroid's cframe, vice versa. What this means is that if the camera is moved in some arbitrary fashion and you start to move the Asteroid, the Asteroid would move in respect to the world and not the camera (e.g. left arrow key to move left means the Asteroid will move left in respect to the world, but would probably move "right" in camera view)**
 
 Simulation:
     - G - Pause/Unpause simulation
-
-
 
 
     ## Implementation features
 
     **A quick note: Our cloth is based on a mixture of polyester-like and feathersilk-like materials, which results in a cloth that is somewhat airy**
 
-    - Cloth Simulation (50 + 20)
-        - The cloth mesh is comprised of an NxM array of vertices connected to form and act as cloth. Initially they were all multiple ropes, but were connected horizontally to fulfill cloth simulation standards.
-        - The cloth can interact with the ball. When the ball partially moves through the cloth, the cloth will fall and rest on the ball.
 
-    - Air Drag for Cloth (10)
-        - The cloth, as it falls, falls down slowly due to the air drag implementation based off of the inclass assignment's rope demo.
+    - Single Agent Navigation* (50)
+        - I used my hw3 implementation of an A* PRM that allows a single agent, in this case a rocket, navigate through space
+        whilst avoiding obstacles, in this case planets and an user controlled asteroid.
 
-    - 3D Implementation & Rendering (20)
-        - The cloth, ball, and camera exist in 3D space, and is able to render at 60 FPS. There are also directional and point lights shot onto the scene to provide the ball with a more 3D look. For ball and camera controls, see above.
+    - 3D Rendering & Camera (10)
+        - The planets, asteroid, rocket, and camera exist in 3D space, and is able to render at ~45 FPS. There are also directional and point lights shot onto the scene to provide the planets with a more 3D look. For asteroid and camera controls, see above.
 
-    - User Interaction (10)
-        - Moving the ball with the arrow keys allows you to move the cloth as you go through it.
-        - LEFT CLICK to also pull on the cloth
+    - Improved Agent & Scene Rendering (10)
+        - The agent is a cone shape stacked on top of a cylinder that I rendered using custom vertices. This shape is not a basic shape
+        nor spherical which means rotation plays a part in obstacle avoidance.
+        - The obstacles are also draw in 3d and textured (both the planets and the asteroid).
 
-    - Realistic Speed (10)
-        - We referenced tissue paper for its speeds, in addition to having a gravitational constant of 9.81 m/s^2
+    - Orientation Smoothing (10)
+        - As the rocket changes direction, the direction the tip of the rocket faces is the same as the direction the rocket is traveling. This change occurs gradually.
 
-    - Ripping/Tearing (10)
-        - NOT IMPLEMENTED
+    - Planning Rotation (10)
+        - There are times when my agent, the rocket, can only fit through a passage if it is oriented in the correct fashion.
+            - Since I can decide the locations of my obstacles, I put two near each other with a small gap where the longest dimension
+            would not fit to see if my agent(s) would pass through it properly, which it did.
 
-    - Continuum Water Simulation (20)
-        - ~~We simulated water in 1D. The simulation is independent of the cloth simulation and can be found under the Water_Simulation Directory~~
+    - User Scenario Editing+ (10)
+        - The user can control the Asteroid, which is an obstacle, using the controls mentioned above.
+        - The user can also spawn new planets if they click 'o' to toggle obstacle generation and then left click anywhere on the window.
+
+    - Realtime User Interaction (10)
+        -  The real time movement of the Asteroid changes the path of the agent(s).
+        -  The real time spawning of new Planets changes the path of the agent(s).
+
+    - Multiple Agents Planning+ (10)
+        - My implementation allows for the creation of multiple agents, in my case rockets.
+            - Each of these rockets spawn in a random location and have their own best path to the goal (Earth).
+
+    - Crowd Simulation+ (20)
+       - Not Implemented
 
     ## Tools Used
 
@@ -58,10 +74,9 @@ Simulation:
 
     ## Difficulties encountered
 
-    The cloth simulation was pretty straightforward, but when it came to the water simulation, we
-    were super stumped because of some array indices kept getting NaN values and we [still] don't know what is causing it.
+    I could not get the Crowd simulation element working. I think this is likely due to the way my code was laid out prior to attempting to account for crowd simulation.
 
-    We also tried to add shaders to the cloth, however, for some reason shaders just straight up doesn't work in the environment, be it attached to the cloth or on some random cube created in the world.
+    The Orientation Smoothing took a long time to get to work, it was very difficult for me to make the agent not simply snap in place.
 
     ## Video
 
