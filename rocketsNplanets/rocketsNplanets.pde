@@ -2,19 +2,12 @@
 //Jeffrey Jia <jiaxx215>
 //Instructor: Stephen J. Guy <sjguy@umn.edu>
 
-//USAGE:
-// On start-up your PRM will be tested on a random scene and the results printed
-// Left clicking will set a red goal, right clicking the blue start
-// The arrow keys will move the circular obstacle with the heavy outline
-// Pressing 'r' will randomize the obstacles and re-run the tests
-
-
 Camera camera;
 
 //Change the below parameters to change the scenario/roadmap size
 int numObstacles = 10;
 int numNodes = 999;
-int numAgents = 10;
+int numAgents = 1;
   
 //A list of circle obstacles
 static int maxNumObstacles = 15;
@@ -191,8 +184,8 @@ Vec3[] computeAgentVel(){
       if(i == agentID){
         agentVel[i] = target[i].minus(agentPos[i]).normalized().times(goalSpeed);
       } else {
-        if(agentPos[i].distanceTo(goalPos) > 50){
-          if(agentPos[i].distanceTo(agentPos[agentID]) < 50){
+        if(agentPos[i].distanceTo(goalPos) > 70){
+          if(agentPos[i].distanceTo(agentPos[agentID]) < 60){
             agentVel[i] = new Vec3(0,0,0);
           }
         }

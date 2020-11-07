@@ -8,17 +8,17 @@ Camera:<br>
     - A/D - Rotate the camera counterclockwise/clockwise about the y-axis<br>
     - W/S - Rotate the camera up/down about the x-axis<br>
     - Q/E - Move camera in/out of the xy plane <br>
-    - Z - Reset camera position
+    - Z - Reset camera position<br>
 
-User Controlled Obstacle (Asteroid):
+User Controlled Obstacle (Asteroid):<br>
     - Arrow Keys - Move the Asteroid up, down, left, right on the xy-plane<br>
 
-Obstacle Generation (Planets):
+Obstacle Generation (Planets):<br>
     - O - Toggle obstacle generation on/off<br>
 
-Mouse:
-    - Left Click (while obstacle generation toggled off) - Move goal to click location (earth)
-    - Left Click (while obstacle generation toggled on) - Generate planet obstacle at click location  
+Mouse:<br>
+    - Left Click (while obstacle generation toggled off) - Move goal to click location (earth) <br>
+    - Left Click (while obstacle generation toggled on) - Generate planet obstacle at click location <br>
 
 **NOTE: The camera's cframe is independent of the Asteroid's cframe, vice versa. What this means is that if the camera is moved in some arbitrary fashion and you start to move the Asteroid, the Asteroid would move in respect to the world and not the camera (e.g. left arrow key to move left means the Asteroid will move left in respect to the world, but would probably move "right" in camera view)**
 
@@ -27,9 +27,6 @@ Simulation:
 
 
   ## Implementation features
-
-  **A quick note: **
-
 
   - Single Agent Navigation* (50)
       - I used my hw3 implementation of an A* PRM that allows a single agent, in this case a rocket ship, navigate through space
@@ -67,6 +64,8 @@ Simulation:
      - The rocket ships are able to detect when other rocket ships are nearby and if it detects any other rocket ship are nearby it will stop its motion temporary until the other rocket ships pass.
           - When all the rocket ships start at the same location and need to move to the new goal location, they will line up and travel there in a single file line.
 
+  **A quick note: Small bug where sometimes a rocket ship will spin a lot introduced by an issue with Orientation Smoothing, better than having the rocket only snap into orientation**
+
   ## Tools Used
 
   - Processing
@@ -82,14 +81,20 @@ Simulation:
 
   ## Video
 
-  [Video Link](https://youtu.be/w036hNs8SpU)
+  [Video Link](https://www.youtube.com/watch?v=6Bt4HjPZEmU&feature=youtu.be&hd=1)
 
   Timestamps: <br>
-  - 0:08 - Starting the simulation<br>
-  - 0:08 - 0:30 - Camera movement<br>
-  - 0:33 - 1:00 - Cloth and ball movement through user input (left click and arrow keys, respectively)<br>
-  - 1:00 - 2:13 - Ball and cloth interaction. Showing as to how air drag affects the cloth as it falls down and how realistic it is to cloth you see in real life.
-  - 2:28 - 2:55 - User interaction with the cloth with mouse input. Also shows as to how realistic the cloth simulation is like.
+  - 0:03 - Starting the simulation<br>
+  - 0:03 - 0:24 - Single Agent Navigation<br>
+  - 0:24 - 0:50 - Camera movement<br>
+  - 0:50 - 1:10 - Improved Agent & Scene Rendering<br>
+  - 1:18 - 1:55 - User Scenario Editing via translating the Asteroid and the addition of Planets<br>
+  - 1:18 - 1:55 - Realtime User Interaction as the Agent's path changes as new obstacles are introduced<br>
+  - 1:45 - 1:52 - Planning Rotation as rocket ship flies through a space that its longest dimension would not<br>
+  - 2:20 - 3:30 - Multiple Agents Planning as shown with 10 agents: each follow their own best path<br>
+  - 2:20 - 3:30 - Crowd Simulation <br>
+      - 1. 2:27-2:37 and 3:00-3:10 - Rocket ship stop when there are other rocket ships nearby (ignore spinning one, bug introduced by small bug with Orientation Smoothing)<br>
+      - 2. 2:45-3:00 - When all the rocket ships start at the same location and need to move to the new goal location, they will line up and travel there in a single file line.<br>
 
   ## Art contest submission
   ***There is no art submission link***
