@@ -29,11 +29,11 @@ Simulation:
   ## Implementation features
 
   - Single Agent Navigation* (50)
-      - I used my hw3 implementation of an A* PRM that allows a single agent, in this case a rocket ship, navigate through space
+      - I used my hw3 implementation of an A* PRM that allows a single agent, in this case a rocket ship, to navigate through space
       whilst avoiding obstacles, in this case planets and an user controlled asteroid.
 
   - 3D Rendering & Camera (10)
-      - The planets, asteroid, rocket ship, and camera exist in 3D space, and is able to render at ~45 FPS. There are also directional and point lights shot onto the scene to provide the planets with a more 3D look. For asteroid and camera controls, see above.
+      - The planets, asteroid, rocket ship, and camera exist in 3D space, and is able to render at ~45 FPS. There are also point lights shot onto the scene to provide the planets with a more 3D look. For asteroid and camera controls, see above.
 
   - Improved Agent & Scene Rendering (10)
       - The agent is a cone shape stacked on top of a cylinder that I rendered using custom vertices. This shape is not a basic shape
@@ -70,11 +70,12 @@ Simulation:
 
   - Processing
   - Java programming language
+  - import java.util.*;
 
 
   ## Difficulties encountered
 
-  I could not quite get the Orientation Smoothing part working perfectly. When the agents rotate they definatly do not snap into pace and it is clear they gradually turn. However, it is sometimes the case where some of the agent over rotate.  
+  I could not quite get the Orientation Smoothing part working perfectly. When the agents rotate they definitely do not snap into pace and it is clear they gradually turn. However, it is sometimes the case where some of the agent over rotate.  
 
   I could not get the Crowd simulation element working as well as I would have liked, but I was still able to get interaction among the agents. I think this is likely due to the way my code was laid out prior to attempting to account for crowd simulation.
 
@@ -90,8 +91,9 @@ Simulation:
   - 0:50 - 1:10 - Improved Agent & Scene Rendering<br>
   - 1:18 - 1:55 - User Scenario Editing via translating the Asteroid and the addition of Planets<br>
   - 1:18 - 1:55 - Realtime User Interaction as the Agent's path changes as new obstacles are introduced<br>
+  - 0:03 - 1:55 - Orientation Smoothing shown throughout (not perfect)<br>
   - 1:45 - 1:52 - Planning Rotation as rocket ship flies through a space that its longest dimension would not<br>
-  - 2:20 - 3:30 - Multiple Agents Planning as shown with 10 agents: each follow their own best path<br>
+  - 2:20 - 3:30 - Multiple Agents Planning as shown with 10 agents each following their own best path<br>
   - 2:20 - 3:30 - Crowd Simulation <br>
       - 1. 2:27-2:37 and 3:00-3:10 - Rocket ship stop when there are other rocket ships nearby (ignore spinning one, bug introduced by small bug with Orientation Smoothing)<br>
       - 2. 2:45-3:00 - When all the rocket ships start at the same location and need to move to the new goal location, they will line up and travel there in a single file line.<br>

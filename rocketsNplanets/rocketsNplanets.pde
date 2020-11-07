@@ -5,9 +5,9 @@
 Camera camera;
 
 //Change the below parameters to change the scenario/roadmap size
-int numObstacles = 10;
+int numObstacles = 1;
 int numNodes = 999;
-int numAgents = 1;
+int numAgents = 50;
   
 //A list of circle obstacles
 static int maxNumObstacles = 15;
@@ -17,7 +17,7 @@ int circleTexture[] = new int[maxNumObstacles];
 boolean generate_obstacle = false;
 PShape globe;
 
-static int maxNumAgents = 15;
+static int maxNumAgents = 50;
 Vec3 startPos[] = new Vec3[maxNumAgents];
 //Vec3 startPos = new Vec3(100,500,0);
 Vec3 goalPos = new Vec3(500,200,0);
