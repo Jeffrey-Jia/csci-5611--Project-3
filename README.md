@@ -100,4 +100,4 @@ Simulation:
 
   ## Art contest submission
   ***There is no art submission link***
-  [Art Submission Link](https://imgur.com/)
+  [Art Submission Link](https://imgur.com/a/CgFqPJp)
